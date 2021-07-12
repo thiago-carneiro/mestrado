@@ -1,0 +1,16 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity tcc_eletronica is
+	port(
+		A : IN std_logic_vector(12 downto 0);
+		IO : INOUT std_logic_vector(7 downto 0);
+		CE : IN std_logic;
+		WE : IN std_logic;
+		OE : IN std_logic
+	);
+end tcc_eletronica
+
+architecture eeprom of tcc_eletronica is
+
+end eeprom;
