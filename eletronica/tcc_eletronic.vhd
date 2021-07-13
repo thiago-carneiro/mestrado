@@ -24,30 +24,23 @@ end tcc_eletronica;
 
 architecture eeprom of tcc_eletronica is
 	type ESTADO is (PARADO,LE,ESCREVE);
---	type BANCO is ARRAY (8191 downto 0) of INTEGER;
-	type BANCO is ARRAY (8191 downto 0) of std_logic_vector;
+	type BANCO is ARRAY (8191 downto 0) of std_logic_vector(7 downto 0);
 	signal estado_atual: ESTADO;
 	signal estado_proximo: ESTADO;
 	signal s_a: std_logic_vector(12 downto 0);
 	signal s_io: std_logic_vector(7 downto 0);
---	variable endereco: INTEGER RANGE 0 TO 8191;
---	variable valor: INTEGER RANGE 0 to 255;
-	variable endereco: std_logic_vector(12 downto 0);
-	variable valor: std_logic_vector(7 downto 0);
-	variable banco_memoria: BANCO;
 
 
 begin
 
-	portas : tcc_eletronica
-		port map(
-		A => s_a,
-		IO => s_io
---		s_a => A,
---		s_io => IO
-	);
+--	portas : tcc_eletronica
+--		port map(
+--		A => s_a,
+--		IO => s_io
+--	);
 	
 PROX_ESTADO: process(nCE,nWE,nOE)
+
 begin
 	case estado_atual is
 		when PARADO =>
@@ -81,21 +74,23 @@ begin
 				estado_proximo <= PARADO;
 			end if;
 	end case;
---	s_a <= to_integer(A); -- conversao std_logic_vector -> int
---	s_io <= to_integer(IO); -- conversao std_logic_vector -> int
 end process;
 
 executa_estado: process(estado_proximo)
+	variable endereco: NATURAL RANGE 0 TO 8191;
+--	variable endereco: std_logic_vector(12 downto 0);
+	variable valor: std_logic_vector(7 downto 0);
+	variable banco_memoria: BANCO;
 begin
 	case estado_proximo is
 		when PARADO =>
 			null;
 		when LE =>
-			endereco := s_a;
-			valor := banco_memoria(to_integer(endereco));
-			s_io <= valor; -- conversao int -> std_logic_vector
+			endereco := to_integer(unsigned(s_a));
+			valor := banco_memoria(endereco);
+			s_io <= valor;
 		when ESCREVE =>
-			endereco := s_a;
+			endereco := to_integer(unsigned(s_a));
 			valor := s_io;
 			banco_memoria(endereco) := valor;
 	end case;
