@@ -27,19 +27,10 @@ architecture eeprom of tcc_eletronica is
 	type BANCO is ARRAY (8191 downto 0) of std_logic_vector(7 downto 0);
 	signal estado_atual: ESTADO;
 	signal estado_proximo: ESTADO;
-	signal s_a: std_logic_vector(12 downto 0);
-	signal s_io: std_logic_vector(7 downto 0);
-
 
 begin
-
---	portas : tcc_eletronica
---		port map(
---		A => s_a,
---		IO => s_io
---	);
 	
-PROX_ESTADO: process(nCE,nWE,nOE)
+ALTERA_ESTADO: process(nCE,nWE,nOE)
 
 begin
 	case estado_atual is
@@ -76,9 +67,8 @@ begin
 	end case;
 end process;
 
-executa_estado: process(estado_proximo)
+EXEC_ESTADO: process(estado_proximo)
 	variable endereco: NATURAL RANGE 0 TO 8191;
---	variable endereco: std_logic_vector(12 downto 0);
 	variable valor: std_logic_vector(7 downto 0);
 	variable banco_memoria: BANCO;
 begin
@@ -86,12 +76,12 @@ begin
 		when PARADO =>
 			null;
 		when LE =>
-			endereco := to_integer(unsigned(s_a));
+			endereco := to_integer(unsigned(A));
 			valor := banco_memoria(endereco);
-			s_io <= valor;
+			IO <= valor;
 		when ESCREVE =>
-			endereco := to_integer(unsigned(s_a));
-			valor := s_io;
+			endereco := to_integer(unsigned(A));
+			valor := IO;
 			banco_memoria(endereco) := valor;
 	end case;
 	estado_atual <= estado_proximo;
