@@ -1,0 +1,9 @@
+force -freeze sim:/tcc_eletronica/A 1010100101010 5000 -cancel 300000
+force -freeze sim:/tcc_eletronica/IO 10101111 110000 -cancel 230000
+force -freeze sim:/tcc_eletronica/nCE 0 10000 -cancel 210000
+force -freeze sim:/tcc_eletronica/nWE 0 10000 -cancel 210000
+run -all
+force -freeze sim:/tcc_eletronica/A 1010100101010 5000 -cancel 300000
+force -freeze sim:/tcc_eletronica/nCE 0 10000 -cancel 210000
+force -freeze sim:/tcc_eletronica/nOE 0 10000 -cancel 210000
+run -all
